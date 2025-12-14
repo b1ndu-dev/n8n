@@ -1,0 +1,436 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-color: #0f172a;
+    --sidebar-bg: #111827;
+    --node-bg: #1f2937;
+    --node-border: #374151;
+    --text-color: #e5e7eb;
+    --muted-color: #9ca3af;
+    --accent-color: #22c55e;
+    --accent-2: #3b82f6;
+    --danger-color: #ef4444;
+    --warning-color: #f59e0b;
+    --grid-color: rgba(59, 130, 246, 0.1);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+#app {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Sidebar */
+#sidebar {
+    width: 280px;
+    background: var(--sidebar-bg);
+    border-right: 1px solid #1f2937;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #1f2937;
+}
+
+.sidebar-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text-color);
+}
+
+.sidebar-header p {
+    font-size: 12px;
+    color: var(--muted-color);
+}
+
+.palette-section {
+    margin-bottom: 24px;
+}
+
+.palette-section h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted-color);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.node-palette {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+}
+
+.node-item {
+    background: var(--node-bg);
+    border: 1px solid var(--node-border);
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: grab;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.node-item:hover {
+    border-color: var(--accent-2);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.node-item i {
+    width: 20px;
+    text-align: center;
+    color: var(--accent-2);
+}
+
+.node-item span {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.sidebar-actions {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Main Content */
+#main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.canvas-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #1f2937;
+    background: #0b1220;
+}
+
+.workflow-info h3 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.workflow-info span {
+    font-size: 12px;
+    color: var(--muted-color);
+}
+
+.canvas-controls {
+    display: flex;
+    gap: 8px;
+}
+
+/* Canvas */
+#canvas {
+    flex: 1;
+    position: relative;
+    overflow: auto;
+    background: linear-gradient(var(--grid-color) 1px, transparent 1px) 0 0,
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px) 0 0;
+    background-size: 20px 20px;
+}
+
+#grid {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+/* Connections */
+#connections {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Nodes */
+#nodes {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+/* Node styles */
+.node {
+    position: absolute;
+    width: 220px;
+    background: var(--node-bg);
+    border: 1px solid var(--node-border);
+    border-radius: 12px;
+    padding: 12px;
+    cursor: move;
+    transition: box-shadow 0.2s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    user-select: none;
+}
+
+.node:hover {
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.25);
+}
+
+.node.selected {
+    border-color: var(--accent-2);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+.node-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.node-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.node-title i {
+    color: var(--accent-color);
+}
+
+.node-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.node-actions button {
+    background: transparent;
+    border: 1px solid #374151;
+    color: var(--muted-color);
+    border-radius: 6px;
+    padding: 4px 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.node-actions button:hover {
+    background: #374151;
+    color: var(--text-color);
+}
+
+.node-body {
+    font-size: 12px;
+    color: var(--muted-color);
+}
+
+.node-footer {
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.output-handle {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    border: 2px solid white;
+    cursor: crosshair;
+    transition: transform 0.2s ease;
+}
+
+.output-handle:hover {
+    transform: scale(1.1);
+}
+
+.input-handle {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent-2);
+    border: 2px solid white;
+    position: absolute;
+    left: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+/* Connection line */
+.connection-line {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-color), var(--accent-2));
+    border-radius: 2px;
+    transform-origin: left center;
+    z-index: 1;
+}
+
+.connection-line.selected {
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.8);
+}
+
+/* Buttons */
+.btn-primary, .btn-secondary, .btn-danger, .btn-icon {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #374151;
+    background: #1f2937;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background: #263344;
+    border-color: var(--accent-color);
+}
+
+.btn-secondary:hover {
+    background: #263344;
+    border-color: var(--accent-2);
+}
+
+.btn-danger:hover {
+    background: #3a1f23;
+    border-color: var(--danger-color);
+}
+
+.btn-icon {
+    padding: 8px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-icon:hover {
+    background: #263344;
+}
+
+/* Node-specific styles */
+.node.webhook .node-title i {
+    color: #ef4444;
+}
+
+.node.httpRequest .node-title i {
+    color: #3b82f6;
+}
+
+.node.code .node-title i {
+    color: #8b5cf6;
+}
+
+.node.function .node-title i {
+    color: #f59e0b;
+}
+
+.node.set .node-title i {
+    color: #10b981;
+}
+
+.node.splitInBatches .node-title i {
+    color: #60a5fa;
+}
+
+.node.if .node-title i {
+    color: #f472b6;
+}
+
+/* Context menu */
+.context-menu {
+    position: fixed;
+    background: var(--node-bg);
+    border: 1px solid var(--node-border);
+    border-radius: 8px;
+    padding: 4px;
+    z-index: 1000;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.context-menu-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--text-color);
+}
+
+.context-menu-item:hover {
+    background: #374151;
+}
+
+/* Status indicators */
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--muted-color);
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.status-running {
+    background: var(--warning-color);
+    box-shadow: 0 0 8px var(--warning-color);
+    animation: pulse 1s infinite;
+}
+
+.status-success {
+    background: var(--accent-color);
+    box-shadow: 0 0 8px var(--accent-color);
+}
+
+.status-error {
+    background: var(--danger-color);
+    box-shadow: 0 0 8px var(--danger-color);
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #sidebar {
+        display: none;
+    }
+    
+    .canvas-toolbar {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+    }
+}
